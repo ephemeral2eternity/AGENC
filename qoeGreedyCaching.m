@@ -15,7 +15,7 @@
 %                       solution.
 % node.
 
-function [qoeGainPercent, qoeGainDynamics, requestQMat, cacheMat] = qoeGreedyCaching(initTyp, isTracking, DN, Q, sQ, sigma_Q, optQoE, rootQ, requests, splIntvl, M, B)
+function [qoeGainPercent, qoeGainDynamics, requestQMat, cacheMat, sQ] = qoeGreedyCaching(initTyp, isTracking, DN, Q, sQ, sigma_Q, optQoE, rootQ, requests, splIntvl, M, B, givenMat)
     %% Generate User Requests and Iterate the agent local greedy caching algorithm.
     qoeGainDynamics = [];
     qoeGainPercent = [];
@@ -26,6 +26,8 @@ function [qoeGainPercent, qoeGainDynamics, requestQMat, cacheMat] = qoeGreedyCac
         cacheMat = reshape(vidID(1:M*B), M, B);
     elseif strcmp(initTyp, 'full')
         cacheMat = repmat(vidID(1 : B)', M, 1);
+    elseif strcmp(initTyp, 'given')
+        cacheMat = givenMat;
     else
         cacheMat = randi(length(DN), M, B);
     end
