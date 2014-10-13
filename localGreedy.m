@@ -10,6 +10,8 @@ clc;
 close all;
 clear all;
 
+plotLines = {':+b', '--dr', '-og', '-.k', '-*y', '-.ob', '-+r', '-sb', '-dg'};
+
 %% System configuration (Should be the same as optCost)
 % The bandwidth cost to get a content from root server. Content size is 20 MB and the number of links to go through is 5.
 cr = 2;
@@ -46,10 +48,17 @@ optSaving = optCost(DN_Real, c_leaf, c_peer, N, M, B);
 
 %% Simulation of local greedy algorithm.
 numRequests = 10000;
-splIntvl = 10;
-[savingPercent, savingVal] = simulateGreedyCaching('non', DN_Real, c_leaf, c_peer, optSaving, requests, splIntvl, M, B);
+splIntvl = 100;
+[savingPercent1, ~] = simulateGreedyCaching('non', DN_Real, c_leaf, c_peer, optSaving, requests, splIntvl, M, B);
+[savingPercent2, ~] = simulateGreedyCaching('full', DN_Real, c_leaf, c_peer, optSaving, requests, splIntvl, M, B);
+[savingPercent3, ~] = simulateGreedyCaching('rand', DN_Real, c_leaf, c_peer, optSaving, requests, splIntvl, M, B);
 
 figure(1), hold on;
 axis([0 numRequests 0 1]);
-plot((0 : splIntvl : numRequests), savingPercent);
+plot((0 : splIntvl : numRequests), savingPercent1, plotLines{1});
+plot((0 : splIntvl : numRequests), savingPercent2, plotLines{2});
+plot((0 : splIntvl : numRequests), savingPercent3, plotLines{3});
+AX = legend('Non Replication', 'Full Replication', 'Random');
+LEG = findobj(AX,'type','text');
+set(LEG,'FontSize',14)
 hold off;
